@@ -34,6 +34,7 @@ def get_texts(
     return query.order_by(TextItem.created_at.desc()).all()
 
 
+
 @router.get("/{text_id}", response_model=TextResponse)
 def get_text(text_id: int, db: Session = Depends(get_db)):
     text = db.query(TextItem).filter(TextItem.id == text_id).first()
