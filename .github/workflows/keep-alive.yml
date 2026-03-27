@@ -3,6 +3,7 @@ name: Keep Supabase alive
 on:
   schedule:
     - cron: '0 12 * * 1'  # каждый понедельник в 12:00 UTC
+  workflow_dispatch:  # ← это добавляет кнопку ручного запуска
 
 jobs:
   ping:
