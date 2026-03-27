@@ -1,5 +1,5 @@
 from fastapi import Security
-from main import verify_api_key
+from auth import verify_api_key
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
@@ -16,7 +16,7 @@ def get_texts(
     search: Optional[str] = Query(None),
     category: Optional[str] = Query(None),
     tag: Optional[str] = Query(None),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     query = db.query(TextItem)
 
@@ -32,7 +32,6 @@ def get_texts(
         query = query.filter(TextItem.tags.contains(tag))
 
     return query.order_by(TextItem.created_at.desc()).all()
-
 
 
 @router.get("/{text_id}", response_model=TextResponse)
