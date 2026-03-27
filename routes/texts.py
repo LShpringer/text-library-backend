@@ -16,7 +16,7 @@ def get_texts(
     search: Optional[str] = Query(None),
     category: Optional[str] = Query(None),
     tag: Optional[str] = Query(None),
-    db: Session = Depends(get_db),
+    db: Session = Depends(get_db)
 ):
     query = db.query(TextItem)
 
