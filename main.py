@@ -10,7 +10,7 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Библиотека текстов")
 
-API_KEY = "super-secret-key"  # придумай свой
+API_KEY = "helenahunter2505!"
 API_KEY_NAME = "X-Admin-Key"
 
 api_key_header = APIKeyHeader(name=API_KEY_NAME, auto_error=False)
