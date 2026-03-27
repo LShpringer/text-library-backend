@@ -1,3 +1,6 @@
+from fastapi import Security
+from main import verify_api_key
+
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from typing import List, Optional
@@ -30,7 +33,11 @@ def get_text(text_id: int, db: Session = Depends(get_db)):
     return text
 
 @router.post("/", response_model=TextResponse)
-def create_text(text: TextCreate, db: Session = Depends(get_db)):
+def create_text(
+    text: TextCreate,
+    db: Session = Depends(get_db),
+    api_key: str = Security(verify_api_key),
+):
     db_text = TextItem(**text.model_dump())
     db.add(db_text)
     db.commit()
@@ -38,7 +45,12 @@ def create_text(text: TextCreate, db: Session = Depends(get_db)):
     return db_text
 
 @router.put("/{text_id}", response_model=TextResponse)
-def update_text(text_id: int, text: TextUpdate, db: Session = Depends(get_db)):
+def update_text(
+    text_id: int,
+    text: TextUpdate,
+    db: Session = Depends(get_db),
+    api_key: str = Security(verify_api_key),
+):
     db_text = db.query(TextItem).filter(TextItem.id == text_id).first()
     if not db_text:
         raise HTTPException(status_code=404, detail="Текст не найден")
@@ -49,7 +61,11 @@ def update_text(text_id: int, text: TextUpdate, db: Session = Depends(get_db)):
     return db_text
 
 @router.delete("/{text_id}")
-def delete_text(text_id: int, db: Session = Depends(get_db)):
+def delete_text(
+    text_id: int,
+    db: Session = Depends(get_db),
+    api_key: str = Security(verify_api_key),
+    ):
     db_text = db.query(TextItem).filter(TextItem.id == text_id).first()
     if not db_text:
         raise HTTPException(status_code=404, detail="Текст не найден")
